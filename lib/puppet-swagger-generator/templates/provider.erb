@@ -1,0 +1,54 @@
+require 'puppet_x/puppetlabs/swagger/prefetch_error'
+require 'puppet_x/puppetlabs/swagger/symbolize_keys'
+require 'puppet_x/puppetlabs/<%= namespace %>/provider'
+
+Puppet::Type.type(:<%= namespace %>_<%= name %>).provide(:swagger, :parent => PuppetX::Puppetlabs::<%= namespace.capitalize %>::Provider) do
+
+  mk_resource_methods
+
+  def self.instance_to_hash(instance)
+    {
+    ensure: :present,
+    name: instance.metadata.name,
+    <% model['properties'].each do |property_name, details| %>
+      <% unless exclusions[name] and exclusions[name].include? property_name %>
+        <%= property_name %>: instance.<%= property_name %>.respond_to?(:to_hash) ? instance.<%= property_name %>.to_hash : instance.<%= property_name %>,
+      <% end %>
+    <% end %>
+    object: instance,
+    }
+  end
+
+  def create
+    Puppet.info("Creating #{name}")
+    create_instance_of('<%= name %>', name, build_params)
+  end
+
+  def flush
+    if ! @property_hash.empty? and @property_hash[:ensure] != :absent
+      flush_instance_of('<%= name %>', name, @property_hash[:object], build_params)
+    end
+  end
+
+  def destroy
+    Puppet.info("Deleting #{name}")
+    destroy_instance_of('<%= name %>', name)
+  end
+
+  private
+  def self.list_instances
+    list_instances_of('<%= name %>')
+  end
+
+  def build_params
+    params = {
+    <% model['properties'].each do |property_name, details| %>
+      <% unless exclusions[name] and exclusions[name].include? property_name %>
+        <%= property_name %>: resource[:<%= property_name %>],
+      <% end %>
+    <% end %>
+    }
+    params.delete_if { |key, value| value.nil? }
+    params
+  end
+end
