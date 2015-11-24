@@ -10,6 +10,19 @@ EXCLUDE_TYPES = []
 
 EXCLUDE_PROPERTIES = OpenStruct.new(
   'pod' => ['kind', 'apiVersion'],
+  'service' => ['kind', 'apiVersion'],
+  'replication_controller' => ['kind', 'apiVersion'],
+  'node' => ['kind', 'apiVersion'],
+  'event' => ['kind', 'apiVersion'],
+  'endpoint' => ['kind', 'apiVersion'],
+  'namespace' => ['kind', 'apiVersion'],
+  'secret' => ['kind', 'apiVersion'],
+  'resource_quota' => ['kind', 'apiVersion'],
+  'limit_range' => ['kind', 'apiVersion'],
+  'persistent_volume' => ['kind', 'apiVersion'],
+  'persistent_volume_claim' => ['kind', 'apiVersion'],
+  'component_status' => ['kind', 'apiVersion'],
+  'service_account' => ['kind', 'apiVersion'],
 )
 
 
