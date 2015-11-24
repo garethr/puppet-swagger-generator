@@ -28,10 +28,8 @@ Usage:
     puppet-swagger-generator [OPTIONS]
 
 Options:
-    --namespace STRING            Namespace for the generated types
-(default: $PUPPET_SWAGGER_NAMESPACE)
-    --schema PATH                 Swagger Schema file (default:
-$PUPPET_SWAGGER_SCHEMA)
+    --namespace STRING            Namespace for the generated types (default: $PUPPET_SWAGGER_NAMESPACE)
+    --schema PATH                 Swagger Schema file (default: $PUPPET_SWAGGER_SCHEMA)
     -h, --help                    print help
 ```
 
