@@ -43,6 +43,15 @@ def generate(name, model, namespace, thing)
   File.write(file, template.result(vars))
 end
 
+def copy_helpers
+  path = 'lib/puppet_x/puppetlabs/'
+  FileUtils::mkdir_p path
+  FileUtils::cp_r(
+    Puppet::Swagger::Generator::Utils.gem_libdir + '/files/swagger/',
+    path
+  )
+end
+
 module Puppet
   module Swagger
     module Generator
@@ -64,13 +73,8 @@ module Puppet
             end
           end
         end
+        copy_helpers
       end
     end
   end
 end
-
-
-
-
-
-
