@@ -2,7 +2,7 @@
 # any manual changes are likely to be clobbered when the files
 # are regenerated.
 
-require 'puppet_x/puppetlabs/<%= namespace %>/provider'
+require_relative '../../../puppet_x/puppetlabs/<%= namespace %>/provider'
 
 Puppet::Type.type(:<%= namespace %>_<%= name %>).provide(:swagger, :parent => PuppetX::Puppetlabs::<%= namespace.capitalize %>::Provider) do
 
