@@ -53,7 +53,11 @@ def generate(name, model, namespace, thing)
   path = thing == 'provider' ? "lib/puppet/#{thing}/#{namespace}_#{name}" : "lib/puppet/#{thing}"
   FileUtils::mkdir_p path
   file = thing == 'provider' ? "#{path}/swagger.rb" : "#{path}/#{namespace}_#{name}.rb"
-  File.write(file, template.result(vars))
+  begin
+    File.write(file, template.result(vars))
+  rescue NoMethodError
+    puts "issue with processing #{file}"
+  end
 end
 
 def copy_helpers

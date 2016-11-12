@@ -34,7 +34,9 @@ Puppet::Type.newtype(:<%= namespace %>_<%= name %>) do
   <% model['properties'].each do |property_name, details| %>
     <% unless exclusions[name] and exclusions[name].include? property_name %>
       newproperty(:<%= property_name %>) do
+        <% if model['description'] %>
         desc "<%= details['description'].gsub('"', "'") %>"
+        <% end %>
         def insync?(is)
           PuppetX::Puppetlabs::Swagger::Utils::fuzzy_compare(is, should)
         end
