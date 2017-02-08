@@ -15,7 +15,7 @@ Puppet::Type.type(:<%= namespace %>_<%= name %>).provide(:swagger, :parent => Pu
     name: instance.metadata.name,
     <% model['properties'].each do |property_name, details| %>
       <% unless exclusions.include? property_name %>
-        <%= property_name %>: instance.<%= property_name %>.respond_to?(:to_hash) ? instance.<%= property_name %>.to_hash : instance.<%= property_name %>,
+        <%= property_name.swagger_to_snake_case %>: instance.<%= property_name %>.respond_to?(:to_hash) ? instance.<%= property_name %>.to_hash : instance.<%= property_name %>,
       <% end %>
     <% end %>
     object: instance,
@@ -50,7 +50,7 @@ Puppet::Type.type(:<%= namespace %>_<%= name %>).provide(:swagger, :parent => Pu
     params = {
     <% model['properties'].each do |property_name, details| %>
       <% unless exclusions.include? property_name %>
-        <%= property_name %>: resource[:<%= property_name %>],
+        <%= property_name %>: resource[:<%= property_name.swagger_to_snake_case %>],
       <% end %>
     <% end %>
     }

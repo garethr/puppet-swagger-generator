@@ -5,7 +5,6 @@
 
 require_relative '../../puppet_x/puppetlabs/swagger/fuzzy_compare'
 
-
 Puppet::Type.newtype(:<%= namespace %>_<%= name %>) do
   <% if model['description'] %>
   @doc = "<%= model['description'].gsub('"', "'") %>"
@@ -17,7 +16,7 @@ Puppet::Type.newtype(:<%= namespace %>_<%= name %>) do
   validate do
     required_properties = [
     <% model['required'].each do |property| %>
-      <%= property.to_sym %>,
+      <%= property.swagger_to_snake_case.to_sym %>,
     <% end %>
     ]
     required_properties.each do |property|
@@ -34,7 +33,7 @@ Puppet::Type.newtype(:<%= namespace %>_<%= name %>) do
   end
   <% model['properties'].each do |property_name, details| %>
     <% unless exclusions.include? property_name %>
-      newproperty(:<%= property_name %>) do
+      newproperty(:<%= property_name.swagger_to_snake_case %>) do
         <% if model['description'] %>
         desc "<%= details['description'].gsub('"', "'") %>"
         <% end %>
