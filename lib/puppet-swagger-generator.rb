@@ -10,7 +10,9 @@ require "puppet-swagger-generator/case"
 EXCLUDE_TYPES = []
 
 ALWAYS_EXCLUDE_PROPERTIES = %w(kind apiVersion)
-EXCLUDE_PROPERTIES = OpenStruct.new()
+EXCLUDE_PROPERTIES = OpenStruct.new(
+   'secret' => ['stringData'],
+)
 
 def format_for_type(name)
   name.gsub(/::/, '/').
