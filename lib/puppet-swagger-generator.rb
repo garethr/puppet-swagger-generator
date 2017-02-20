@@ -5,26 +5,14 @@ require 'fileutils'
 require 'clamp'
 
 require "puppet-swagger-generator/utils"
+require "puppet-swagger-generator/case"
 
 EXCLUDE_TYPES = []
 
+ALWAYS_EXCLUDE_PROPERTIES = %w(kind apiVersion)
 EXCLUDE_PROPERTIES = OpenStruct.new(
-  'pod' => ['kind', 'apiVersion'],
-  'service' => ['kind', 'apiVersion'],
-  'replication_controller' => ['kind', 'apiVersion'],
-  'node' => ['kind', 'apiVersion'],
-  'event' => ['kind', 'apiVersion'],
-  'endpoint' => ['kind', 'apiVersion'],
-  'namespace' => ['kind', 'apiVersion'],
-  'secret' => ['kind', 'apiVersion'],
-  'resource_quota' => ['kind', 'apiVersion'],
-  'limit_range' => ['kind', 'apiVersion'],
-  'persistent_volume' => ['kind', 'apiVersion'],
-  'persistent_volume_claim' => ['kind', 'apiVersion'],
-  'component_status' => ['kind', 'apiVersion'],
-  'service_account' => ['kind', 'apiVersion'],
+   'secret' => ['stringData'],
 )
-
 
 def format_for_type(name)
   name.gsub(/::/, '/').
@@ -48,15 +36,16 @@ def generate(name, model, namespace, thing)
   vars = binding
   vars.local_variable_set(:name, name)
   vars.local_variable_set(:model, model)
-  vars.local_variable_set(:exclusions, EXCLUDE_PROPERTIES)
+  vars.local_variable_set(:type_exclusions, EXCLUDE_PROPERTIES)
+  vars.local_variable_set(:all_exclusions, ALWAYS_EXCLUDE_PROPERTIES)
   vars.local_variable_set(:namespace, namespace)
   path = thing == 'provider' ? "lib/puppet/#{thing}/#{namespace}_#{name}" : "lib/puppet/#{thing}"
   FileUtils::mkdir_p path
   file = thing == 'provider' ? "#{path}/swagger.rb" : "#{path}/#{namespace}_#{name}.rb"
   begin
     File.write(file, template.result(vars))
-  rescue NoMethodError
-    puts "issue with processing #{file}"
+  rescue NoMethodError => e
+    puts "issue with processing #{file}: #{e.message}"
   end
 end
 
