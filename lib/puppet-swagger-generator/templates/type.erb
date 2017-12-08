@@ -16,7 +16,7 @@ Puppet::Type.newtype(:<%= namespace %>_<%= name %>) do
   validate do
     required_properties = [
     <% model['required'].each do |property| %>
-      <%= property.swagger_to_snake_case.to_sym %>,
+      :<%= property.swagger_to_snake_case.to_sym %>,
     <% end %>
     ]
     required_properties.each do |property|
