@@ -34,7 +34,7 @@ Puppet::Type.newtype(:<%= namespace %>_<%= name %>) do
   <% model['properties'].each do |property_name, details| %>
     <% unless exclusions.include? property_name %>
       newproperty(:<%= property_name.swagger_to_snake_case %>) do
-        <% if model['description'] %>
+        <% if details['description'] %>
         desc "<%= details['description'].gsub('"', "'") %>"
         <% end %>
         def insync?(is)
