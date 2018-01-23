@@ -33,7 +33,11 @@ Puppet::Type.newtype(:<%= namespace %>_<%= name %>) do
   end
   <% model['properties'].each do |property_name, details| %>
     <% unless exclusions.include? property_name %>
+      <% if details['type'] == 'array' %>
+      newproperty(:<%= property_name.swagger_to_snake_case %>, :array_matching => :all) do
+      <% else %>
       newproperty(:<%= property_name.swagger_to_snake_case %>) do
+      <% end %>
         <% if details['description'] %>
         desc "<%= details['description'].gsub('"', "'") %>"
         <% end %>
